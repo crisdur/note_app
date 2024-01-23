@@ -48,18 +48,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 Container(
                   width: 200,
                   height: 200,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
                     color: AppColors.buttonColors,
                   ),
                   child: Center(
-                    child: Text(
-                      "NEOSEG",
-                      style: Theme.of(context)
-                          .primaryTextTheme
-                          .headlineLarge!
-                          .copyWith(color: Colors.white),
-                    ),
+                    child: Icon(Icons.edit, size: 100, color: Colors.white),
                   ),
                 ),
                 const SizedBox(height: 35),
