@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "121121792337",
+    "project_id": "note-app-cb433",
+    "storage_bucket": "note-app-cb433.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:121121792337:android:be67a1d72d1dc63a1bf370",
+        "android_client_info": {
+          "package_name": "com.example.note_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjUYYemDp1-rCjzO0KW6oZUh8Mu-E0WW4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
