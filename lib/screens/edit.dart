@@ -98,6 +98,7 @@ class _EditScreenState extends State<EditScreen> {
               noteId: widget.note!.noteId,
               userId: authController.auth.currentUser!.uid,
               modifiedTime: DateTime.now(),
+              completed: widget.note!.completed,
             ));
 
             Get.back();

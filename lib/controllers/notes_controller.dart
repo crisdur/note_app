@@ -17,9 +17,9 @@ class NotesController extends GetxController {
 
   Rx<AccountStatus> accountStatus = Rx<AccountStatus>(AccountStatus.initial);
 
-  RxList<NoteModel> filteredNotes = RxList<NoteModel>([]);
-
   RxBool? createNoteNotifier = false.obs;
+
+  RxString? searchString = ''.obs;
 
   @override
   void onInit() {
@@ -50,7 +50,6 @@ class NotesController extends GetxController {
       getNotes(currentUserId).listen(
         (List<NoteModel> _) {
           accountStatus.value = AccountStatus.loaded;
-          filterNotes('');
         },
         onError: (dynamic error) {
           accountStatus.value = AccountStatus.error;
@@ -63,14 +62,6 @@ class NotesController extends GetxController {
   void onClose() {
     notes.close();
     super.onClose();
-  }
-
-  void filterNotes(String searchTerm) {
-    filteredNotes.assignAll(notes
-        .where((note) =>
-            note.title.toLowerCase().contains(searchTerm.toLowerCase()) ||
-            note.content.toLowerCase().contains(searchTerm.toLowerCase()))
-        .toList());
   }
 
   Stream<List<NoteModel>> getNotes(String userId) {

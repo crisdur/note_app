@@ -42,7 +42,7 @@ class CustomTextField extends StatelessWidget {
       obscureText: isPassword,
       readOnly: readOnly,
       onTap: onTap,
-      style: const TextStyle(color: Colors.white),
+      style: const TextStyle(color: AppColors.white),
       decoration: InputDecoration(
         labelText: labelText,
         labelStyle: const TextStyle(

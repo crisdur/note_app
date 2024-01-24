@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:note_app/theme/colors.dart';
 
 class NavigationText extends StatelessWidget {
   final String normalText;
@@ -21,7 +22,10 @@ class NavigationText extends StatelessWidget {
         children: [
           TextSpan(
             text: normalText,
-            style: Theme.of(context).primaryTextTheme.bodySmall,
+            style: Theme.of(context)
+                .primaryTextTheme
+                .bodySmall!
+                .copyWith(color: AppColors.white),
           ),
           TextSpan(
             text: ' $linkText',

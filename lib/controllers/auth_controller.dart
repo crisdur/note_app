@@ -177,6 +177,7 @@ class AuthController extends GetxController {
       resetControllersAndFocusNodes();
       update();
       Get.offAll(() => const LoginScreen());
+      resetControllersAndFocusNodes();
     } catch (e) {
       Get.snackbar('Error ocurred!', e.toString(),
           backgroundColor: Colors.red, colorText: Colors.white);
