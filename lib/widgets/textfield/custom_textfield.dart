@@ -42,22 +42,25 @@ class CustomTextField extends StatelessWidget {
       obscureText: isPassword,
       readOnly: readOnly,
       onTap: onTap,
+      style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         labelText: labelText,
-        labelStyle: const TextStyle(fontSize: 12.0),
+        labelStyle: const TextStyle(
+          fontSize: 12.0,
+        ),
         filled: false,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
-          borderSide: const BorderSide(color: AppColors.buttonColors),
+          borderSide: const BorderSide(color: AppColors.principalColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
-          borderSide: const BorderSide(color: AppColors.buttonColors),
+          borderSide: const BorderSide(color: AppColors.principalColor),
         ),
         hintText: hintText,
         contentPadding:
             const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-        hintStyle: const TextStyle(fontSize: 12.0),
+        hintStyle: const TextStyle(fontSize: 12.0, color: Colors.white),
       ),
       controller: textEditingController,
       keyboardType: keyboardType,

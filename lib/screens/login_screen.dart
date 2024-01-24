@@ -50,10 +50,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 200,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: AppColors.buttonColors,
+                    color: AppColors.principalColor,
                   ),
                   child: Center(
-                    child: Icon(Icons.edit, size: 100, color: Colors.white),
+                    child: Icon(Icons.edit, size: 100, color: Colors.black),
                   ),
                 ),
                 const SizedBox(height: 35),

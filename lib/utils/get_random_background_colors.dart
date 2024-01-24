@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:note_app/constants/colors.dart';
+import '../theme/colors.dart';
 
 getRandomBackgroundColor() {
   Random random = Random();

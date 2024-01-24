@@ -60,6 +60,22 @@ class AuthController extends GetxController {
     super.onClose();
   }
 
+  void resetControllersAndFocusNodes() {
+    loginEmailController = TextEditingController();
+    loginPasswordController = TextEditingController();
+    loginEmailFocusNode = FocusNode();
+    loginPasswordFocusNode = FocusNode();
+
+    registerNameController = TextEditingController();
+    registerEmailController = TextEditingController();
+    registerPasswordController = TextEditingController();
+    registerConfirmPasswordController = TextEditingController();
+    registerNameFocusNode = FocusNode();
+    registerEmailFocusNode = FocusNode();
+    registerPasswordFocusNode = FocusNode();
+    registerConfirmPasswordFocusNode = FocusNode();
+  }
+
   var displayName = '';
 
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -158,6 +174,7 @@ class AuthController extends GetxController {
     try {
       await auth.signOut();
       displayName = '';
+      resetControllersAndFocusNodes();
       update();
       Get.offAll(() => const LoginScreen());
     } catch (e) {
@@ -188,5 +205,12 @@ class AuthController extends GetxController {
     registerEmailFocusNode.unfocus();
     registerPasswordFocusNode.unfocus();
     registerConfirmPasswordFocusNode.unfocus();
+  }
+
+  void resetState() {
+    clearLoginFields();
+    clearLoginFocusNodes();
+    clearRegisterFields();
+    clearRegisterFocusNodes();
   }
 }
