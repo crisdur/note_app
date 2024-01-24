@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:note_app/models/note_model.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:note_app/controllers/notes_controller.dart';
+import 'package:note_app/utils/get_random_background_colors.dart';
 import 'package:note_app/widgets/floating_button/custom_floating_action_button.dart';
+
+import '../controllers/auth_controller.dart';
+import 'edit.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key});
 
   @override
   Widget build(BuildContext context) {
+    NotesController notesController = Get.put(NotesController());
+
     return Scaffold(
       floatingActionButton: CustomFloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Get.to(() => const EditScreen());
+        },
         icon: Icons.add,
       ),
       body: Padding(
@@ -64,51 +74,78 @@ class HomeScreen extends StatelessWidget {
             Expanded(
               child: ListView.builder(
                 physics: const BouncingScrollPhysics(),
-                itemCount: sampleNotes.length,
+                itemCount: notesController.notes.length,
                 itemBuilder: (context, index) {
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    elevation: 3,
-                    child: ListTile(
-                      trailing: Container(
-                        width: 100,
-                        height: 50,
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              value: false,
-                              onChanged: (value) {},
-                            ),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.delete),
-                            ),
-                          ],
-                        ),
+                  return GestureDetector(
+                    onTap: () {
+                      Get.to(() => EditScreen(
+                            note: notesController.notes[index],
+                          ));
+                    },
+                    child: Card(
+                      margin: const EdgeInsets.only(bottom: 15),
+                      color: getRandomBackgroundColor(),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      title: RichText(
-                        text: TextSpan(
-                          text: 'Hello \n',
-                          style: Theme.of(context).primaryTextTheme.bodyMedium,
-                          children: [
-                            TextSpan(
-                              text: 'World',
-                              style:
-                                  Theme.of(context).primaryTextTheme.bodySmall,
-                            )
-                          ],
+                      elevation: 3,
+                      child: ListTile(
+                        title: RichText(
+                          maxLines: 3,
+                          text: TextSpan(
+                            text: '${notesController.notes[index].title}\n',
+                            style:
+                                Theme.of(context).primaryTextTheme.bodyMedium,
+                            children: [
+                              TextSpan(
+                                text: notesController.notes[index].content,
+                                style: Theme.of(context)
+                                    .primaryTextTheme
+                                    .bodySmall,
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                      subtitle: Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Text(
-                          'Edited : 10/12/2024',
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.grey.shade800,
-                            fontStyle: FontStyle.italic,
+                        subtitle: Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Text(
+                            ' ${DateFormat('hh:mm a EEE dd/MM/yy').format(notesController.notes[index].modifiedTime)}',
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.grey.shade800,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ),
+                        trailing: SizedBox(
+                          width: 120,
+                          height: 50,
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                left: 30,
+                                top: 0,
+                                bottom: 0,
+                                child: Checkbox(
+                                  value: false,
+                                  onChanged: (value) {},
+                                ),
+                              ),
+                              Positioned(
+                                right: 0,
+                                top: 0,
+                                bottom: 0,
+                                child: IconButton(
+                                  onPressed: () async {
+                                    final result = await confirmDialog(context);
+                                    if (result != null && result) {
+                                      // deleteNote(index);
+                                    }
+                                  },
+                                  icon: const Icon(Icons.delete),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -122,4 +159,51 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<dynamic> confirmDialog(BuildContext context) {
+  return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.grey.shade900,
+          icon: const Icon(
+            Icons.info,
+            color: Colors.grey,
+          ),
+          title: const Text(
+            'Are you sure you want to delete?',
+            style: TextStyle(color: Colors.white),
+          ),
+          content:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                child: const SizedBox(
+                  width: 60,
+                  child: Text(
+                    'Yes',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                )),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                child: const SizedBox(
+                  width: 60,
+                  child: Text(
+                    'No',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                )),
+          ]),
+        );
+      });
 }
