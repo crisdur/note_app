@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:note_app/controllers/notes_controller.dart';
 import 'package:note_app/models/note_model.dart';
+
+import '../controllers/auth_controller.dart';
 
 class EditScreen extends StatefulWidget {
   final NoteModel? note;
@@ -12,10 +17,14 @@ class EditScreen extends StatefulWidget {
 class _EditScreenState extends State<EditScreen> {
   TextEditingController _titleController = TextEditingController();
   TextEditingController _contentController = TextEditingController();
+  late NotesController notesController;
+  late AuthController authController;
 
   @override
   void initState() {
-    // TODO: implement initState
+    notesController = Get.put(NotesController());
+    authController = Get.put(AuthController());
+
     if (widget.note != null) {
       _titleController = TextEditingController(text: widget.note!.title);
       _contentController = TextEditingController(text: widget.note!.content);
@@ -81,7 +90,28 @@ class _EditScreenState extends State<EditScreen> {
         ]),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          if (widget.note != null) {
+            notesController.updateNote(NoteModel(
+              title: _titleController.text,
+              content: _contentController.text,
+              noteId: widget.note!.noteId,
+              userId: authController.auth.currentUser!.uid,
+              modifiedTime: DateTime.now(),
+            ));
+
+            Get.back();
+          } else {
+            notesController.createNote(NoteModel(
+                title: _titleController.text,
+                content: _contentController.text,
+                userId: authController.auth.currentUser!.uid,
+                modifiedTime: DateTime.now(),
+                completed: false));
+
+            Get.back();
+          }
+        },
         elevation: 10,
         backgroundColor: Colors.grey.shade800,
         child: const Icon(Icons.save),

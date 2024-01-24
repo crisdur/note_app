@@ -1,49 +1,63 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NoteModel {
-  String? id;
+  String? noteId;
+  String? userId;
   String title;
   String content;
   DateTime modifiedTime;
-  bool completed;
+  bool? completed;
+  Map<String, dynamic>? translatedContent;
 
   NoteModel({
-    this.id,
+    this.noteId,
+    this.userId,
     required this.title,
     required this.content,
     required this.modifiedTime,
-    required this.completed,
+    this.completed,
+    this.translatedContent,
   });
 
   factory NoteModel.fromDocumentSnapshot(DocumentSnapshot snapshot) {
     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
 
     return NoteModel(
-      id: snapshot.id,
+      noteId: snapshot.id,
+      userId: data['userId'],
       title: data['title'],
       content: data['content'],
-      modifiedTime: (data['modifiedTime'] as Timestamp).toDate(),
+      modifiedTime: data['modifiedTime'] != null
+          ? (data['modifiedTime'] as Timestamp).toDate()
+          : DateTime.now(),
       completed: data['completed'],
+      translatedContent: data['translatedContent'],
     );
   }
 
-  factory NoteModel.fromMap(Map<String, dynamic> map) {
+  factory NoteModel.fromMap(Map<String, dynamic> map, String documentId) {
     return NoteModel(
-      id: map['id'],
+      noteId: documentId,
+      userId: map['userId'],
       title: map['title'],
       content: map['content'],
-      modifiedTime: (map['modifiedTime'] as Timestamp).toDate(),
+      modifiedTime: map['modifiedTime'] != null
+          ? (map['modifiedTime'] as Timestamp).toDate()
+          : DateTime.now(),
       completed: map['completed'],
+      translatedContent: map['translatedContent'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'noteId': noteId,
+      'userId': userId,
       'title': title,
       'content': content,
-      'modifiedTime': Timestamp.fromDate(modifiedTime),
+      'modifiedTime': modifiedTime,
       'completed': completed,
+      'translatedContent': translatedContent,
     };
   }
 }

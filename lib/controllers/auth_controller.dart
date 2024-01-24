@@ -43,19 +43,19 @@ class AuthController extends GetxController {
 
   @override
   void onClose() {
-    // loginEmailController.dispose();
-    // loginPasswordController.dispose();
-    // loginEmailFocusNode.dispose();
-    // loginPasswordFocusNode.dispose();
+    loginEmailController.dispose();
+    loginPasswordController.dispose();
+    loginEmailFocusNode.dispose();
+    loginPasswordFocusNode.dispose();
 
-    // registerNameController.dispose();
-    // registerEmailController.dispose();
-    // registerPasswordController.dispose();
-    // registerConfirmPasswordController.dispose();
-    // registerNameFocusNode.dispose();
-    // registerEmailFocusNode.dispose();
-    // registerPasswordFocusNode.dispose();
-    // registerConfirmPasswordFocusNode.dispose();
+    registerNameController.dispose();
+    registerEmailController.dispose();
+    registerPasswordController.dispose();
+    registerConfirmPasswordController.dispose();
+    registerNameFocusNode.dispose();
+    registerEmailFocusNode.dispose();
+    registerPasswordFocusNode.dispose();
+    registerConfirmPasswordFocusNode.dispose();
 
     super.onClose();
   }

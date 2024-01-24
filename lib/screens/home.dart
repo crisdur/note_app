@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:note_app/controllers/auth_controller.dart';
 import 'package:note_app/controllers/notes_controller.dart';
 import 'package:note_app/utils/get_random_background_colors.dart';
 import 'package:note_app/widgets/floating_button/custom_floating_action_button.dart';
 
-import '../controllers/auth_controller.dart';
 import 'edit.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key});
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     NotesController notesController = Get.put(NotesController());
+    AuthController authController = Get.put(AuthController());
+    final TextEditingController searchController = TextEditingController();
 
     return Scaffold(
       floatingActionButton: CustomFloatingActionButton(
@@ -35,7 +37,9 @@ class HomeScreen extends StatelessWidget {
                 ),
                 IconButton(
                     padding: const EdgeInsets.all(0),
-                    onPressed: () {},
+                    onPressed: () {
+                      authController.signOut();
+                    },
                     icon: Container(
                       width: 40,
                       height: 40,
@@ -53,6 +57,10 @@ class HomeScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 15),
               child: TextField(
+                controller: searchController,
+                onChanged: (value) {
+                  notesController.filterNotes(value);
+                },
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(vertical: 12),
                   hintText: "Search notes ...",
@@ -72,89 +80,141 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: notesController.notes.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Get.to(() => EditScreen(
-                            note: notesController.notes[index],
-                          ));
+              child: Obx(() => ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: notesController.filteredNotes.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Get.to(() => EditScreen(
+                                note: notesController.filteredNotes[index],
+                              ));
+                        },
+                        child: NoteCard(
+                          notesController: notesController,
+                          index: index,
+                        ),
+                      );
                     },
-                    child: Card(
-                      margin: const EdgeInsets.only(bottom: 15),
-                      color: getRandomBackgroundColor(),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      elevation: 3,
-                      child: ListTile(
-                        title: RichText(
-                          maxLines: 3,
-                          text: TextSpan(
-                            text: '${notesController.notes[index].title}\n',
-                            style:
-                                Theme.of(context).primaryTextTheme.bodyMedium,
-                            children: [
-                              TextSpan(
-                                text: notesController.notes[index].content,
-                                style: Theme.of(context)
-                                    .primaryTextTheme
-                                    .bodySmall,
-                              )
-                            ],
-                          ),
-                        ),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: Text(
-                            ' ${DateFormat('hh:mm a EEE dd/MM/yy').format(notesController.notes[index].modifiedTime)}',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.grey.shade800,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                        ),
-                        trailing: SizedBox(
-                          width: 120,
-                          height: 50,
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                left: 30,
-                                top: 0,
-                                bottom: 0,
-                                child: Checkbox(
-                                  value: false,
-                                  onChanged: (value) {},
-                                ),
-                              ),
-                              Positioned(
-                                right: 0,
-                                top: 0,
-                                bottom: 0,
-                                child: IconButton(
-                                  onPressed: () async {
-                                    final result = await confirmDialog(context);
-                                    if (result != null && result) {
-                                      // deleteNote(index);
-                                    }
-                                  },
-                                  icon: const Icon(Icons.delete),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
+                  )),
             )
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class NoteCard extends StatefulWidget {
+  var index;
+
+  NoteCard({
+    super.key,
+    required this.notesController,
+    required this.index,
+  });
+
+  final NotesController notesController;
+
+  @override
+  State<NoteCard> createState() => _NoteCardState();
+}
+
+bool showTranslatedContent = false;
+
+class _NoteCardState extends State<NoteCard> {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 15),
+      color: getRandomBackgroundColor(),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      elevation: 3,
+      child: ListTile(
+        title: RichText(
+          maxLines: 3,
+          text: TextSpan(
+            text:
+                '${widget.notesController.filteredNotes[widget.index].title}\n',
+            style: Theme.of(context).primaryTextTheme.bodyMedium,
+            children: [
+              TextSpan(
+                text: showTranslatedContent
+                    ? widget.notesController.filteredNotes[widget.index]
+                        .translatedContent!['en']
+                    : widget
+                        .notesController.filteredNotes[widget.index].content,
+                style: Theme.of(context).primaryTextTheme.bodySmall,
+              )
+            ],
+          ),
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Text(
+            ' ${DateFormat('hh:mm a EEE dd/MM/yy').format(widget.notesController.filteredNotes[widget.index].modifiedTime)}',
+            style: TextStyle(
+              fontSize: 10,
+              color: Colors.grey.shade800,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+        ),
+        trailing: SizedBox(
+          width: 120,
+          height: 50,
+          child: Stack(
+            children: [
+              Positioned(
+                left: 37,
+                top: 0,
+                bottom: 0,
+                child: Checkbox(
+                  value: widget.notesController.notes[widget.index].completed,
+                  onChanged: (value) {
+                    widget.notesController.updateCompletedStatus(
+                        widget.notesController.filteredNotes[widget.index]
+                            .noteId!,
+                        !widget.notesController.filteredNotes[widget.index]
+                            .completed!);
+                  },
+                ),
+              ),
+              if (widget.notesController.filteredNotes[widget.index]
+                      .translatedContent !=
+                  null)
+                Positioned(
+                  left: 5,
+                  top: 0,
+                  bottom: 0,
+                  child: IconButton(
+                    onPressed: () async {
+                      setState(() {
+                        showTranslatedContent = !showTranslatedContent;
+                      });
+                    },
+                    icon: const Icon(Icons.translate),
+                  ),
+                ),
+              Positioned(
+                right: 0,
+                top: 0,
+                bottom: 0,
+                child: IconButton(
+                  onPressed: () async {
+                    final result = await confirmDialog(context);
+                    if (result != null && result) {
+                      widget.notesController.deleteNote(widget
+                          .notesController.filteredNotes[widget.index].noteId!);
+                    }
+                  },
+                  icon: const Icon(Icons.delete),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
