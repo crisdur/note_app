@@ -8,7 +8,10 @@ The app allows users to save, search, edit, and mark notes as complete.
 
 
 
+## Tested on
 
+Google Pixel (Android Studio emulator device)
+Google Pixel 7 (Physical device)
 
 ## This Projects runs with the command:
 
@@ -20,7 +23,7 @@ flutter run
 Flutter 3.16.5
 
 ## dependencies:
-```
+```bash
 dependencies:
   cloud_firestore: 4.12.1
   firebase_core: 2.20.0
