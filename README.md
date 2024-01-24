@@ -4,6 +4,12 @@ Flutter Multiplatform App for notetaking with offline persistence.
 ## About:
  
 The app allows users to save, search, edit, and mark notes as complete. 
+
+## Test account:
+ 
+- test@gmail.com
+- password: 12345678
+
 ## Screenshots:
 
 <img width="399" alt="Captura de pantalla 2024-01-24 a la(s) 3 21 44 p  m" src="https://github.com/crisdur/note_app/assets/48272016/5f0d1947-7c35-48e0-92df-7f72cad0c969">
