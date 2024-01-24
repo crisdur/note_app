@@ -10,11 +10,13 @@ enum AccountStatus { initial, loading, loaded, error }
 class NotesController extends GetxController {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   final AuthController _authController = Get.find<AuthController>();
-
+//Rerefencia a la colección de notas
   late CollectionReference notesReference;
 
+//Listado de notas
   RxList<NoteModel> notes = RxList<NoteModel>([]);
 
+//Estado de carga de las notas
   Rx<AccountStatus> accountStatus = Rx<AccountStatus>(AccountStatus.initial);
 
   RxBool? createNoteNotifier = false.obs;
@@ -45,6 +47,8 @@ class NotesController extends GetxController {
 
       accountStatus.value = AccountStatus.loading;
 
+// Stream de notas.
+
       notes.bindStream(getNotes(_authController.auth.currentUser!.uid));
 
       getNotes(currentUserId).listen(
@@ -72,7 +76,7 @@ class NotesController extends GetxController {
       return query.docs.map((e) => NoteModel.fromDocumentSnapshot(e)).toList();
     }).handleError((error) {
       accountStatus.value = AccountStatus.error;
-      print("Error al obtener cuentas: $error");
+      // print("Error al obtener cuentas: $error");
       return [];
     });
   }
@@ -98,7 +102,7 @@ class NotesController extends GetxController {
     } catch (e) {
       createNoteNotifier?.value = false;
       // showSnackBar('Error al crear la nota', isError: true);
-      print('Error al crear la nota: $e');
+      // print('Error al crear la nota: $e');
     }
   }
 
@@ -115,7 +119,7 @@ class NotesController extends GetxController {
       // showSnackBar('Nota actualizada exitosamente');
     } catch (e) {
       // showSnackBar('Error al actualizar la nota', isError: true);
-      print('Error al actualizar la nota: $e');
+      // print('Error al actualizar la nota: $e');
     }
   }
 
@@ -126,7 +130,7 @@ class NotesController extends GetxController {
       // showSnackBar('Nota eliminada exitosamente');
     } catch (e) {
       // showSnackBar('Error al eliminar la nota', isError: true);
-      print('Error al eliminar la nota: $e');
+      // print('Error al eliminar la nota: $e');
     }
   }
 
@@ -136,7 +140,7 @@ class NotesController extends GetxController {
       // showSnackBar('Estado completado actualizado exitosamente');
     } catch (e) {
       // showSnackBar('Error al actualizar el estado completado', isError: true);
-      print('Error al actualizar el estado completado: $e');
+      // print('Error al actualizar el estado completado: $e');
     }
   }
 }

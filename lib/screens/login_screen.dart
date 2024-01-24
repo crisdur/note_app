@@ -18,7 +18,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  late var controller;
+  late AuthController controller;
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(20),
                     color: AppColors.principalColor,
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Icon(Icons.edit, size: 100, color: Colors.black),
                   ),
                 ),
@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text("Inicia sesión",
                     style: Theme.of(context).primaryTextTheme.bodyLarge),
                 const SizedBox(height: 25),
-                Container(
+                SizedBox(
                   width: Responsive.percentageWidth(context, 80,
                       maxWidth: (42 * 1024) / 100),
                   child: Column(

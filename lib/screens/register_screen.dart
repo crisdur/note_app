@@ -17,7 +17,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  late var controller;
+  late AuthController controller;
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -41,7 +41,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Center(
             child: Form(
               key: formKey,
-              child: Container(
+              child: SizedBox(
                 width: Responsive.percentageWidth(context, 80,
                     maxWidth: (42 * 1024) / 100),
                 child: Column(

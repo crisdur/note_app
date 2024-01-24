@@ -11,6 +11,7 @@ class Responsive {
   /// Returns the calculated font size in pixels.
   static double responsiveFontSize(double baseFontSize, double? maximum) {
     final height =
+        // ignore: deprecated_member_use
         MediaQueryData.fromView(WidgetsBinding.instance.window).size.height;
     double result = baseFontSize * (height / 844);
 
@@ -38,7 +39,8 @@ class Responsive {
     double? maximum,
   }) {
     final height =
-        MediaQueryData.fromWindow(WidgetsBinding.instance!.window).size.height;
+        // ignore: deprecated_member_use
+        MediaQueryData.fromView(WidgetsBinding.instance.window).size.height;
     double result = (size / 844) * height;
 
     if (minimum != null) {
@@ -67,6 +69,7 @@ class Responsive {
     double? maximum,
   }) {
     final width =
+        // ignore: deprecated_member_use
         MediaQueryData.fromView(WidgetsBinding.instance.window).size.width;
     double result = (size / 390) * width;
 

@@ -6,9 +6,9 @@ import '../../screens/home.dart';
 import '../../utils/get_random_background_colors.dart';
 
 class NoteCard extends StatefulWidget {
-  var index;
+  final int index;
 
-  NoteCard({
+  const NoteCard({
     super.key,
     required this.notesController,
     required this.index,
